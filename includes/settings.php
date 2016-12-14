@@ -16,7 +16,7 @@
 
 		<?php
 
-		settings_fields('coe_settings');
+		settings_fields( 'coe_settings' );
 		do_settings_sections( 'coe_settings' );
 
 		?>
@@ -29,6 +29,15 @@
 					<th><?php _e('Change to', 'coe'); ?></th>
 				</tr>
 			</thead>
+            <tr valign="top">
+                <th scope="row">
+                    <label>
+						<?php _e( 'Google Maps API Key', 'coe' ); ?>
+                    </label>
+                </th>
+                <td><?php echo $this->getGoogleMapsApiKey(); ?></td>
+                <td><input class="form-control" type="text" name="<?php echo \COE\Controller::SETTING_GOOGLE_MAP_API_KEY; ?>" value="<?php echo esc_html( $this->getGoogleMapsApiKey() ); ?>"></td>
+            </tr>
 		</table>
 
 		<?php submit_button(); ?>

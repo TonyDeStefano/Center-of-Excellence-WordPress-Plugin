@@ -9,6 +9,8 @@ class Controller {
 	const VERSION_JS = '1.0.0';
 	const OPTION_VERSION = 'coe_version';
 
+	const SETTING_GOOGLE_MAP_API_KEY = 'coe_google_maps_api_key';
+
 	public $attributes;
 
 	/**
@@ -25,7 +27,10 @@ class Controller {
 	public function init()
 	{
 		add_thickbox();
+
 		wp_enqueue_script( 'coe-js', plugin_dir_url( dirname( __DIR__ ) ) . 'js/coe.js', array ( 'jquery' ), ( WP_DEBUG ) ? time() : self::VERSION_JS, TRUE );
+		wp_enqueue_script( 'coe-google-maps-api', 'https://maps.googleapis.com/maps/api/js?key=' . $this->getGoogleMapsApiKey(), array ( 'jquery' ), ( WP_DEBUG ) ? time() : self::VERSION_JS, TRUE );
+
 		wp_enqueue_style( 'coe-css', plugin_dir_url( dirname( __DIR__ ) ) . 'css/coe.css', array (), ( WP_DEBUG ) ? time() : self::VERSION_CSS );
 		wp_enqueue_style( 'coe-bootstrap-css', plugin_dir_url( dirname( __DIR__ ) ) . 'css/bootstrap.css', array (), ( WP_DEBUG ) ? time() : self::VERSION_CSS );
 	}
@@ -104,8 +109,8 @@ class Controller {
 	public function settings_page()
 	{
 		add_options_page(
-			'Fit Spokane ' . __( 'Settings', 'fit-spokane' ),
-			'Fit Spokane',
+			'Center of Excellence ' . __( 'Settings', 'coe' ),
+			'Center of Excellence',
 			'manage_options',
 			plugin_basename( dirname( dirname( __DIR__ ) ) ),
 			array ( $this, 'print_settings_page' )
@@ -135,7 +140,15 @@ class Controller {
 	 */
 	public function register_settings()
 	{
-		register_setting( 'coe_settings', 'setting_name' );
+		register_setting( 'coe_settings', self::SETTING_GOOGLE_MAP_API_KEY );
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getGoogleMapsApiKey()
+	{
+		return get_option( self::SETTING_GOOGLE_MAP_API_KEY, '' );
 	}
 
 	/**
@@ -248,5 +261,79 @@ class Controller {
 		}
 
 		return $messages;
+	}
+
+	public function college_meta()
+	{
+		add_meta_box( 'coe-college-meta', 'College Info', array( $this, 'college_meta_fields'), College::POST_TYPE );
+	}
+
+	public function college_meta_fields()
+	{
+		include( dirname( dirname( __DIR__ ) ) . '/includes/college-meta.php' );
+	}
+
+	public function save_custom_post_meta()
+	{
+		/** @var \WP_Post $post */
+		global $post;
+
+		if ( $post )
+		{
+			if ( $post->post_type == College::POST_TYPE )
+			{
+				$college = new College;
+				$college
+					->loadFromPost( $post )
+					->setAddress( $_POST['address'] )
+					->setCity( $_POST['city'] )
+					->setState( $_POST['state'] )
+					->setZip( $_POST['zip'] )
+					->update();
+
+				if ( $college->hasAddress() )
+				{
+					$url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' . urlencode( $college->getAddressString() );
+					$url = str_replace( '#', 'STE+', $url );
+
+					$options = array(
+						CURLOPT_RETURNTRANSFER => TRUE,     // return web page
+						CURLOPT_HEADER         => FALSE,    // don't return headers
+						CURLOPT_FOLLOWLOCATION => TRUE,     // follow redirects
+						CURLOPT_ENCODING       => '',       // handle all encodings
+						CURLOPT_USERAGENT      => '', 		// who am i
+						CURLOPT_AUTOREFERER    => TRUE,     // set referer on redirect
+						CURLOPT_CONNECTTIMEOUT => 120,      // timeout on connect
+						CURLOPT_TIMEOUT        => 120,      // timeout on response
+						CURLOPT_MAXREDIRS      => 10,       // stop after 10 redirects
+					);
+
+					$ch = curl_init( $url );
+					curl_setopt_array ( $ch, $options );
+					$content = curl_exec( $ch );
+					curl_close( $ch );
+
+					$result = json_decode( $content, TRUE );
+					if ( $result[ 'status' ] == 'OK' )
+					{
+						$college
+							->setLat( $result[ 'results' ][ 0 ][ 'geometry' ][ 'location' ][ 'lat' ] )
+							->setLng( $result[ 'results' ][ 0 ][ 'geometry' ][ 'location' ][ 'lng' ] )
+							->update();
+					}
+
+				}
+			}
+		}
+	}
+
+	public function add_new_collge_columns( $columns )
+	{
+		return $columns;
+	}
+
+	public function custom_college_columns( $column )
+	{
+
 	}
 }
