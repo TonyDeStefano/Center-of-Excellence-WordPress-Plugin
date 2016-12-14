@@ -51,7 +51,7 @@ add_action ( 'init', array( $coe_controller, 'form_capture' ) );
 add_shortcode ( 'coe', array( $coe_controller, 'short_code' ) );
 
 /* admin stuff */
-if (is_admin() )
+if ( is_admin() )
 {
 	/* Add main menu and sub-menus */
 	add_action( 'admin_menu', array( $coe_controller, 'admin_menus') );
