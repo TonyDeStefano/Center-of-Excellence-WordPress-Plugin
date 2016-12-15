@@ -329,11 +329,36 @@ class Controller {
 
 	public function add_new_collge_columns( $columns )
 	{
+		$new = array(
+			'location' => 'Location',
+			'has_map' => 'On Map'
+		);
+
+		$columns = array_slice( $columns, 0, 2, TRUE ) + $new + array_slice( $columns, 2, NULL, TRUE );
+
 		return $columns;
 	}
 
 	public function custom_college_columns( $column )
 	{
+		/** @var \WP_Post $post */
+		global $post;
 
+		$college = new College;
+		$college->loadFromPost( $post );
+
+		if ( $college->getId() !== NULL )
+		{
+			switch ( $column )
+			{
+				case 'location':
+					echo $college->getCityState();
+					break;
+
+				case 'has_map':
+					echo ( $college->hasLatLng() ) ? 'Yes (<a href="http://www.google.com/maps/place/' . urlencode( $college->getAddressString() ) . '/@' . $college->getLat() . ',' . $college->getLng() . '" target="_blank">preview</a>)' : 'No';
+					break;
+			}
+		}
 	}
 }

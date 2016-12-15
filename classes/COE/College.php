@@ -299,4 +299,47 @@ class College {
 	{
 		return $this->getAddress() . ' ' . $this->getCity() . ', ' . $this->getState() . ' ' . $this->getZip();
 	}
+
+	/**
+	 * @return string
+	 */
+	public function getCityState()
+	{
+		return $this->getCity() . ( ( strlen( $this->getCity() ) > 0 ) ? ', ' : '' ) . $this->getState();
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getCityStateZip()
+	{
+		return $this->getCityState() . ( ( strlen( $this->getCityState() ) > 0 ) ? ' ' : '' ) . $this->getZip();
+	}
+
+	/**
+	 * @return College[]
+	 */
+	public static function getAllPublishedColleges()
+	{
+		/** @var \WP_Post $post */
+		global $post;
+
+		$colleges = array();
+
+		$query = new \WP_Query( array(
+			'post_type' => self::POST_TYPE,
+			'post_status' => 'publish'
+		));
+
+
+		while ( $query->have_posts() )
+		{
+			$query->the_post();
+			$college = new College;
+			$college->loadFromPost( $post );
+			$colleges[ $college->getId() ] = $college;
+		}
+
+		return $colleges;
+	}
 }
