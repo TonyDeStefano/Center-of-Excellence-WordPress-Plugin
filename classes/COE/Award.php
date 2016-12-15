@@ -108,7 +108,7 @@ class Award {
 	 */
 	public function setId( $id )
 	{
-		$this->id = $id;
+		$this->id = ( is_numeric( $id ) ) ? intval( $id ) : NULL;
 
 		return $this;
 	}
