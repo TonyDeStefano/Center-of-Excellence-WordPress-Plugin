@@ -32,7 +32,7 @@
             <tr valign="top">
                 <th scope="row">
                     <label>
-						<?php _e( 'Google Maps API Key', 'coe' ); ?>
+						<?php _e( 'Google Maps API Key (optional)', 'coe' ); ?>
                     </label>
                 </th>
                 <td><?php echo $this->getGoogleMapsApiKey(); ?></td>

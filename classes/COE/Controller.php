@@ -263,16 +263,6 @@ class Controller {
 		return $messages;
 	}
 
-	public function college_meta()
-	{
-		add_meta_box( 'coe-college-meta', 'College Info', array( $this, 'college_meta_fields'), College::POST_TYPE );
-	}
-
-	public function college_meta_fields()
-	{
-		include( dirname( dirname( __DIR__ ) ) . '/includes/college-meta.php' );
-	}
-
 	public function save_custom_post_meta()
 	{
 		/** @var \WP_Post $post */
@@ -324,9 +314,39 @@ class Controller {
 
 				}
 			}
+
+			elseif ( $post->post_type == Award::POST_TYPE )
+			{
+				$award = new Award;
+				$award
+					->loadFromPost( $post )
+					->setType( $_POST['award_type'] )
+					->update();
+			}
 		}
 	}
 
+	/**
+	 *
+	 */
+	public function college_meta()
+	{
+		add_meta_box( 'coe-college-meta', 'College Info', array( $this, 'college_meta_fields'), College::POST_TYPE );
+	}
+
+	/**
+	 *
+	 */
+	public function college_meta_fields()
+	{
+		include( dirname( dirname( __DIR__ ) ) . '/includes/college-meta.php' );
+	}
+
+	/**
+	 * @param array $columns
+	 *
+	 * @return array
+	 */
 	public function add_new_collge_columns( $columns )
 	{
 		$new = array(
@@ -339,6 +359,9 @@ class Controller {
 		return $columns;
 	}
 
+	/**
+	 * @param string $column
+	 */
 	public function custom_college_columns( $column )
 	{
 		/** @var \WP_Post $post */
@@ -357,6 +380,60 @@ class Controller {
 
 				case 'has_map':
 					echo ( $college->hasLatLng() ) ? 'Yes (<a href="http://www.google.com/maps/place/' . urlencode( $college->getAddressString() ) . '/@' . $college->getLat() . ',' . $college->getLng() . '" target="_blank">preview</a>)' : 'No';
+					break;
+			}
+		}
+	}
+
+	/**
+	 *
+	 */
+	public function award_meta()
+	{
+		add_meta_box( 'coe-award-meta', 'Degree/Certificate Info', array( $this, 'award_meta_fields'), Award::POST_TYPE );
+	}
+
+	/**
+	 *
+	 */
+	public function award_meta_fields()
+	{
+		include( dirname( dirname( __DIR__ ) ) . '/includes/award-meta.php' );
+	}
+
+	/**
+	 * @param array $columns
+	 *
+	 * @return array
+	 */
+	public function add_new_award_columns( $columns )
+	{
+		$new = array(
+			'type' => 'Type'
+		);
+
+		$columns = array_slice( $columns, 0, 2, TRUE ) + $new + array_slice( $columns, 2, NULL, TRUE );
+
+		return $columns;
+	}
+
+	/**
+	 * @param string $column
+	 */
+	public function custom_award_columns( $column )
+	{
+		/** @var \WP_Post $post */
+		global $post;
+
+		$college = new Award;
+		$college->loadFromPost( $post );
+
+		if ( $college->getId() !== NULL )
+		{
+			switch ( $column )
+			{
+				case 'type':
+					echo $college->getType();
 					break;
 			}
 		}

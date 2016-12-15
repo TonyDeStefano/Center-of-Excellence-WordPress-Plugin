@@ -81,4 +81,9 @@ if ( is_admin() )
 	add_action( 'admin_init', array( $coe_controller, 'college_meta' ) );
 	add_filter( 'manage_' . \COE\College::POST_TYPE . '_posts_columns', array( $coe_controller, 'add_new_collge_columns' ) );
 	add_action( 'manage_' . \COE\College::POST_TYPE . '_posts_custom_column' , array( $coe_controller, 'custom_college_columns' ) );
+
+	/* award meta and columns */
+	add_action( 'admin_init', array( $coe_controller, 'award_meta' ) );
+	add_filter( 'manage_' . \COE\Award::POST_TYPE . '_posts_columns', array( $coe_controller, 'add_new_award_columns' ) );
+	add_action( 'manage_' . \COE\Award::POST_TYPE . '_posts_custom_column' , array( $coe_controller, 'custom_award_columns' ) );
 }
