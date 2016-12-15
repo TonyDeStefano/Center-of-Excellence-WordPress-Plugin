@@ -98,7 +98,7 @@ class ProgramCategory {
 	/**
 	 * @return ProgramCategory[]
 	 */
-	public static function getAllPublishedAwards()
+	public static function getAllPublishedCategories()
 	{
 		/** @var \WP_Post $post */
 		global $post;
