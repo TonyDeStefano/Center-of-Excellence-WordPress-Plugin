@@ -342,4 +342,26 @@ class College {
 
 		return $colleges;
 	}
+
+	/**
+	 * This caches the colleges for quick retrieval when printing college names in a loop
+	 * @param int $id
+	 *
+	 * @return string
+	 */
+	public static function getCollegeNameById( $id )
+	{
+		if ( ! isset( $GLOBALS['coe_college_names'] ) )
+		{
+			$GLOBALS['coe_college_names'] = array();
+			$colleges = self::getAllPublishedColleges();
+
+			foreach ( $colleges as $college )
+			{
+				$GLOBALS['coe_college_names'][ $college->getId() ] = $college->getTitle();
+			}
+		}
+
+		return ( array_key_exists( $id, $GLOBALS['coe_college_names'] ) ? $GLOBALS['coe_college_names'][ $id ] : 'Unknown' );
+	}
 }

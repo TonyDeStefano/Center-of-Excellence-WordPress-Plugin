@@ -193,11 +193,17 @@ class Controller {
 				'not_found' => __( 'No', 'coe' ) . ' ' . $post_type[ 1 ] . ' ' . __( 'Found', 'coe' )
 			);
 
+			$supports = array ( 'title' );
+			if ( $post_type[ 2 ] == Program::POST_TYPE )
+			{
+				$supports[] = 'editor';
+			}
+
 			$args = array (
 				'labels' => $labels,
 				'hierarchical' => FALSE,
 				'description' => $post_type[ 1 ],
-				'supports' => array ( 'title' ),
+				'supports' => $supports,
 				'show_ui' => TRUE,
 				'show_in_menu' => 'coe',
 				'show_in_nav_menus' => TRUE,
@@ -313,6 +319,25 @@ class Controller {
 					}
 
 				}
+			}
+
+			elseif ( $post->post_type == Program::POST_TYPE )
+			{
+				$program = new Program;
+				$program
+					->loadFromPost( $post )
+					->setCollegeId( $_POST['college_id'] )
+					->setAwardId( $_POST['award_id'] )
+					->setProgramCategoryIds( ( isset( $_POST['category_id'] ) ) ? $_POST['category_id'] : array() )
+					->setContactName( $_POST['contact_name'] )
+					->setContactEmail( $_POST['contact_email'] )
+					->setContactPhone( $_POST['contact_phone'] )
+					->setCredits( $_POST['credits'] )
+					->setStartsAt( $_POST['starts_at'] )
+					->setEndsAt( $_POST['ends_at'] )
+					->setAnticipatedGraduates( $_POST['graduates'] )
+					->setSkillSets( $_POST['skill_sets'] )
+					->update();
 			}
 
 			elseif ( $post->post_type == Award::POST_TYPE )
@@ -434,6 +459,85 @@ class Controller {
 			{
 				case 'type':
 					echo $college->getType();
+					break;
+			}
+		}
+	}
+
+	/**
+	 *
+	 */
+	public function program_meta()
+	{
+		add_meta_box( 'coe-award-meta', 'Program Info', array( $this, 'program_meta_fields'), Program::POST_TYPE );
+	}
+
+	/**
+	 *
+	 */
+	public function program_meta_fields()
+	{
+		include( dirname( dirname( __DIR__ ) ) . '/includes/program-meta.php' );
+	}
+
+	/**
+	 * @param array $columns
+	 *
+	 * @return array
+	 */
+	public function add_new_program_columns( $columns )
+	{
+		$new = array(
+			'college' => 'College',
+			'award' => 'Award',
+			'credits' => 'Credits',
+			'dates' => 'Dates',
+			'graduates' => 'Graduates'
+		);
+
+		$columns = array_slice( $columns, 0, 2, TRUE ) + $new + array_slice( $columns, 2, NULL, TRUE );
+
+		return $columns;
+	}
+
+	/**
+	 * @param string $column
+	 */
+	public function custom_program_columns( $column )
+	{
+		/** @var \WP_Post $post */
+		global $post;
+
+		if ( ! isset( $GLOBALS['coe_this_post'] ) )
+		{
+			$GLOBALS['coe_this_post'] = $post;
+		}
+
+		$program = new Program;
+		$program->loadFromPost( $GLOBALS['coe_this_post'] );
+
+		if ( $program->getId() !== NULL )
+		{
+			switch ( $column )
+			{
+				case 'college':
+					echo College::getCollegeNameById( $program->getCollegeId() );
+					break;
+
+				case 'award':
+					echo Award::getAwardNameById( $program->getAwardId() );
+					break;
+
+				case 'credits':
+					echo $program->getCredits();
+					break;
+
+				case 'dates':
+					echo $program->getStartsAt( 'n/j/Y' ) . ' - ' . $program->getEndsAt( 'n/j/Y' ) ;
+					break;
+
+				case 'graduates':
+					echo $program->getAnticipatedGraduates();
 					break;
 			}
 		}

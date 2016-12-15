@@ -187,4 +187,26 @@ class Award {
 
 		return $awards;
 	}
+
+	/**
+	 * This caches the awards for quick retrieval when printing award names in a loop
+	 * @param int $id
+	 *
+	 * @return string
+	 */
+	public static function getAwardNameById( $id )
+	{
+		if ( ! isset( $GLOBALS['coe_award_names'] ) )
+		{
+			$GLOBALS['coe_award_names'] = array();
+			$awards = self::getAllPublishedAwards();
+
+			foreach ( $awards as $award )
+			{
+				$GLOBALS['coe_award_names'][ $award->getId() ] = $award->getTitle();
+			}
+		}
+
+		return ( array_key_exists( $id, $GLOBALS['coe_award_names'] ) ? $GLOBALS['coe_award_names'][ $id ] : 'Unknown' );
+	}
 }
