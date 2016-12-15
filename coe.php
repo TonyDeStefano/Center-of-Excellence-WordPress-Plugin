@@ -75,8 +75,9 @@ if ( is_admin() )
 	/* add the settings page */
 	add_action( 'admin_menu', array( $coe_controller, 'settings_page' ) );
 
+	/* save post meta */
 	add_action( 'save_post', array( $coe_controller, 'save_custom_post_meta' ) );
-	
+
 	/* college meta and columns */
 	add_action( 'admin_init', array( $coe_controller, 'college_meta' ) );
 	add_filter( 'manage_' . \COE\College::POST_TYPE . '_posts_columns', array( $coe_controller, 'add_new_collge_columns' ) );

@@ -122,27 +122,6 @@ class Program {
 		$this->update();
 	}
 
-	/**
-	 *
-	 */
-	public function delete()
-	{
-		if ( $this->id !== NULL )
-		{
-			delete_post_meta( $this->id, self::META_CONTACT_NAME );
-			delete_post_meta( $this->id, self::META_CONTACT_EMAIL );
-			delete_post_meta( $this->id, self::META_CONTACT_PHONE );
-			delete_post_meta( $this->id, self::META_CREDITS );
-			delete_post_meta( $this->id, self::META_STARTS_AT );
-			delete_post_meta( $this->id, self::META_ENDS_AT );
-			delete_post_meta( $this->id, self::META_GRADUATES );
-			delete_post_meta( $this->id, self::META_SKILL_SETS );
-			delete_post_meta( $this->id, self::META_AWARD_ID );
-			delete_post_meta( $this->id, self::META_COLLEGE_ID );
-			delete_post_meta( $this->id, self::META_CATEGORY_IDS );
-		}
-	}
-
 	/** @var College $college */
 	private $college;
 

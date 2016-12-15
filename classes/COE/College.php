@@ -101,22 +101,6 @@ class College {
 	}
 
 	/**
-	 *
-	 */
-	public function delete()
-	{
-		if ( $this->id !== NULL )
-		{
-			delete_post_meta( $this->id, self::META_ADDRESS );
-			delete_post_meta( $this->id, self::META_CITY );
-			delete_post_meta( $this->id, self::META_STATE );
-			delete_post_meta( $this->id, self::META_ZIP );
-			delete_post_meta( $this->id, self::META_LAT );
-			delete_post_meta( $this->id, self::META_LNG );
-		}
-	}
-
-	/**
 	 * @return mixed
 	 */
 	public function getId()

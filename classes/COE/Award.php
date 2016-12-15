@@ -83,17 +83,6 @@ class Award {
 	}
 
 	/**
-	 *
-	 */
-	public function delete()
-	{
-		if ( $this->id !== NULL )
-		{
-			delete_post_meta( $this->id, self::META_TYPE );
-		}
-	}
-
-	/**
 	 * @return mixed
 	 */
 	public function getId()
