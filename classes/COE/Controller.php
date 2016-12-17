@@ -286,7 +286,7 @@ class Controller {
 
 		if ( $post )
 		{
-			if ( $post->post_type == College::POST_TYPE )
+			if ( $post->post_type == College::POST_TYPE && isset( $_POST['address'] ) )
 			{
 				$college = new College;
 				$college
@@ -331,7 +331,7 @@ class Controller {
 				}
 			}
 
-			elseif ( $post->post_type == Program::POST_TYPE )
+			elseif ( $post->post_type == Program::POST_TYPE && isset( $_POST['college_id'] ) )
 			{
 				$program = new Program;
 				$program
@@ -350,7 +350,7 @@ class Controller {
 					->update();
 			}
 
-			elseif ( $post->post_type == Award::POST_TYPE )
+			elseif ( $post->post_type == Award::POST_TYPE && isset( $_POST['award_type'] ) )
 			{
 				$award = new Award;
 				$award

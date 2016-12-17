@@ -312,7 +312,8 @@ class College {
 
 		$query = new \WP_Query( array(
 			'post_type' => self::POST_TYPE,
-			'post_status' => 'publish'
+			'post_status' => 'publish',
+			'posts_per_page' => -1
 		));
 
 
