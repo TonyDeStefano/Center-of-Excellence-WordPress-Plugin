@@ -501,7 +501,8 @@ class Controller {
 			'college' => 'College',
 			'award' => 'Award',
 			'credits' => 'Credits',
-			'dates' => 'Dates',
+			'starts_at' => 'Starts',
+			'ends_at' => 'Ends',
 			'graduates' => 'Graduates'
 		);
 
@@ -542,8 +543,12 @@ class Controller {
 					echo $program->getCredits();
 					break;
 
-				case 'dates':
-					echo $program->getStartsAt( 'n/j/Y' ) . ' - ' . $program->getEndsAt( 'n/j/Y' ) ;
+				case 'starts_at':
+					echo $program->getStartsAt();
+					break;
+
+				case 'ends_at':
+					echo $program->getEndsAt();
 					break;
 
 				case 'graduates':

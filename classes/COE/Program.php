@@ -272,51 +272,41 @@ class Program {
 	}
 
 	/**
-	 * @param string $format
-	 *
-	 * @return mixed
+	 * @return string
 	 */
-	public function getStartsAt( $format='Y-m-d' )
+	public function getStartsAt()
 	{
-		return ( $this->starts_at === NULL ) ? NULL : date( $format, strtotime( $this->starts_at ) );
+		return ( $this->starts_at === NULL ) ? '' : $this->starts_at;
 	}
 
 	/**
-	 * @param mixed $starts_at
+	 * @param string $starts_at
 	 *
 	 * @return Program
 	 */
 	public function setStartsAt( $starts_at )
 	{
-		if ( strlen( $starts_at ) > 0 )
-		{
-			$this->starts_at = ( is_numeric( $starts_at ) ) ? date( 'Y-m-d', $starts_at ) : date( 'Y-m-d', strtotime( $starts_at ) );
-		}
+		$this->starts_at = $starts_at;
 
 		return $this;
 	}
 
 	/**
-	 * @param string $format
-	 *
-	 * @return mixed
+	 * @return string
 	 */
-	public function getEndsAt( $format='Y-m-d' )
+	public function getEndsAt()
 	{
-		return ( $this->ends_at === NULL ) ? NULL : date( $format, strtotime( $this->ends_at ) );
+		return ( $this->ends_at === NULL ) ? '' : $this->ends_at;
 	}
 
 	/**
-	 * @param mixed $ends_at
+	 * @param string $ends_at
 	 *
 	 * @return Program
 	 */
 	public function setEndsAt( $ends_at )
 	{
-		if ( strlen( $ends_at ) > 0 )
-		{
-			$this->ends_at = ( is_numeric( $ends_at ) ) ? date( 'Y-m-d', $ends_at ) : date( 'Y-m-d', strtotime( $ends_at ) );
-		}
+		$this->ends_at = $ends_at;
 
 		return $this;
 	}

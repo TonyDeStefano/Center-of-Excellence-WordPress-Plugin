@@ -109,7 +109,7 @@ $categories = \COE\ProgramCategory::getAllPublishedCategories()
             </label>
         </th>
         <td>
-            <input name="starts_at" class="form-control" id="coe-program-starts-at" value="<?php echo esc_html( $program->getStartsAt( 'n/j/Y' ) ); ?>">
+            <input name="starts_at" class="form-control" id="coe-program-starts-at" value="<?php echo esc_html( $program->getStartsAt() ); ?>">
         </td>
     </tr>
     <tr>
@@ -119,7 +119,7 @@ $categories = \COE\ProgramCategory::getAllPublishedCategories()
             </label>
         </th>
         <td>
-            <input name="ends_at" class="form-control" id="coe-program-ends-at" value="<?php echo esc_html( $program->getEndsAt( 'n/j/Y' ) ); ?>">
+            <input name="ends_at" class="form-control" id="coe-program-ends-at" value="<?php echo esc_html( $program->getEndsAt() ); ?>">
         </td>
     </tr>
     <tr>
