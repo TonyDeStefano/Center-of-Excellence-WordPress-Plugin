@@ -65,6 +65,11 @@ foreach ( $categories as $category )
 	}
 }
 
+foreach ( $programs as $program )
+{
+    $colleges[ $program->getCollegeId() ]->addProgramId( $program->getId() );
+}
+
 $college_id = ( isset( $_GET['college_id'] ) && array_key_exists( $_GET['college_id'], $colleges ) ) ? $_GET['college_id'] : NULL;
 $program_id = ( isset( $_GET['program_id'] ) && array_key_exists( $_GET['program_id'], $colleges ) ) ? $_GET['program_id'] : NULL;
 if ( $program_id !== NULL )
@@ -134,6 +139,33 @@ if ( $program_id !== NULL )
 
 			</script>
 
+            <hr>
+
+            <?php foreach ( $colleges as $college ) { ?>
+
+                <div class="panel panel-coe-orange">
+                    <div class="panel-heading">
+                        <?php echo $college->getTitle(); ?><br>
+                        <small>
+                            <?php echo $college->getCityState(); ?>
+                        </small>
+                        <span class="pull-right">
+                        <i class="fa fa-chevron-up coe-filter-arrow" data-menu="<?php echo $college->getId(); ?>" data-display="none"></i>
+                    </span>
+                    </div>
+                    <div class="panel-body panel-body-<?php echo $college->getId(); ?>" style="display:none;">
+
+                        <?php foreach ( $college->getProgramIds() as $program_id ) { ?>
+                            <p>
+                                <a href="?program_id=<?php echo $program_id; ?>"><?php echo $programs[ $program_id ]->getTitle(); ?></a>
+                            </p>
+                        <?php } ?>
+
+                    </div>
+                </div>
+
+            <?php } ?>
+
 		</div>
 
 		<div class="col-md-4">
@@ -142,7 +174,7 @@ if ( $program_id !== NULL )
 				<div class="panel-heading">
 					Categories
                     <span class="pull-right">
-                        <i class="fa fa-chevron-down coe-filter-arrow" data-menu="a" data-display="none"></i>
+                        <i class="fa fa-chevron-up coe-filter-arrow" data-menu="a" data-display="none"></i>
                     </span>
 				</div>
 				<div class="panel-body panel-body-a" style="display:none;">
@@ -158,7 +190,7 @@ if ( $program_id !== NULL )
 				<div class="panel-heading">
 					Cities
                     <span class="pull-right">
-                        <i class="fa fa-chevron-down coe-filter-arrow" data-menu="b" data-display="none"></i>
+                        <i class="fa fa-chevron-up coe-filter-arrow" data-menu="b" data-display="none"></i>
                     </span>
 				</div>
 				<div class="panel-body panel-body-b" style="display:none;">
@@ -174,7 +206,7 @@ if ( $program_id !== NULL )
 				<div class="panel-heading">
 					Colleges
                     <span class="pull-right">
-                        <i class="fa fa-chevron-down coe-filter-arrow" data-menu="c" data-display="none"></i>
+                        <i class="fa fa-chevron-up coe-filter-arrow" data-menu="c" data-display="none"></i>
                     </span>
 				</div>
 				<div class="panel-body panel-body-c" style="display:none;">

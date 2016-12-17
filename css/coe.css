@@ -1,4 +1,5 @@
-.panel-coe {
+.panel-coe,
+.panel-coe-orange {
     border: none !important;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.8) !important;
 }
@@ -10,6 +11,19 @@
     font-size: 16px;
     font-family: 'Open Sans', sans-serif;
     letter-spacing: 1.2px;
+}
+
+.panel-coe-orange > .panel-heading {
+    color: #FFF;
+    background: #ff9212;
+    text-transform: uppercase;
+    font-size: 16px;
+    font-family: 'Open Sans', sans-serif;
+    letter-spacing: 1.2px;
+}
+
+.panel-coe-orange > .panel-heading small {
+    font-size: 75%;
 }
 
 .coe-cb {

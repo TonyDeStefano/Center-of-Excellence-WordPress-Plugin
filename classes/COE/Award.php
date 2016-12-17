@@ -164,7 +164,8 @@ class Award {
 			'post_type' => self::POST_TYPE,
 			'post_status' => 'publish',
 			'posts_per_page' => -1,
-			'orderby' => 'title'
+			'orderby' => 'title',
+			'order' => 'ASC'
 		));
 
 

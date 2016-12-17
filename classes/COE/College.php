@@ -25,6 +25,7 @@ class College {
 	private $lat;
 	private $lng;
 	private $logo;
+	private $program_ids = [];
 
 	/**
 	 * College constructor.
@@ -306,6 +307,38 @@ class College {
 	}
 
 	/**
+	 * @return array
+	 */
+	public function getProgramIds()
+	{
+		return $this->program_ids;
+	}
+
+	/**
+	 * @param array $program_ids
+	 *
+	 * @return College
+	 */
+	public function setProgramIds( $program_ids )
+	{
+		$this->program_ids = $program_ids;
+
+		return $this;
+	}
+
+	/**
+	 * @param $program_id
+	 *
+	 * @return $this
+	 */
+	public function addProgramId( $program_id )
+	{
+		$this->program_ids[] = $program_id;
+
+		return $this;
+	}
+
+	/**
 	 * @return bool
 	 */
 	public function hasAddress()
@@ -359,7 +392,8 @@ class College {
 			'post_type' => self::POST_TYPE,
 			'post_status' => 'publish',
 			'posts_per_page' => -1,
-			'orderby' => 'title'
+			'orderby' => 'title',
+			'order' => 'ASC'
 		));
 
 
