@@ -3,45 +3,73 @@
 /** @var \COE\Controller $coe_controller */
 global $coe_controller;
 
-$all_colleges = \COE\College::getAllPublishedColleges();
-$all_categories = \COE\ProgramCategory::getAllPublishedCategories();
-$all_awards = \COE\Award::getAllPublishedAwards();
+$colleges = \COE\College::getAllPublishedColleges();
+$categories = \COE\ProgramCategory::getAllPublishedCategories();
+$awards = \COE\Award::getAllPublishedAwards();
 $programs = \COE\Program::getAllPublishedPrograms();
 
 $cities = array();
-
-/** @var \COE\College[] $colleges */
-$colleges = array();
-
-/** @var \COE\ProgramCategory[] $categories */
-$categories = array();
-
-/** @var \COE\Award[] $awards */
-$awards = array();
+$college_ids = array();
+$category_ids = array();
+$award_ids = array();
 
 foreach ( $programs as $program )
 {
-	if ( ! array_key_exists( $program->getCollegeId(), $colleges ) && isset( $all_colleges[ $program->getCollegeId() ] ) )
+	if ( ! in_array( $program->getCollegeId(), $college_ids ) && isset( $colleges[ $program->getCollegeId() ] ) )
 	{
-		$colleges[ $program->getCollegeId() ] = $all_colleges[ $program->getCollegeId() ];
+		$college_ids[] =  $program->getCollegeId();
+
 		if ( ! in_array( $colleges[ $program->getCollegeId() ]->getCityState(), $cities ) )
 		{
 			$cities[] = $colleges[ $program->getCollegeId() ]->getCityState();
 		}
 	}
 
-	if ( ! array_key_exists( $program->getAwardId(), $awards ) && isset( $all_awards[ $program->getAwardId() ] ) )
+	if ( ! in_array( $program->getAwardId(), $award_ids ) && isset( $awards[ $program->getAwardId() ] ) )
 	{
-		$awards[ $program->getAwardId() ] = $all_awards[ $program->getAwardId() ];
+		$award_ids[] = $program->getAwardId();
 	}
 
 	foreach ( $program->getProgramCategoryIds() as $category_id )
 	{
-		if ( ! array_key_exists( $category_id, $categories ) && isset( $all_categories[ $category_id ] ) )
+		if ( ! in_array( $category_id, $category_ids ) && isset( $categories[ $category_id ] ) )
 		{
-			$categories[ $category_id ] = $all_categories[ $category_id ];
+			$category_ids[] = $category_id;
 		}
 	}
+}
+
+asort( $cities );
+
+foreach ( $colleges as $college )
+{
+    if ( ! in_array( $college->getId(), $college_ids ) )
+    {
+        unset( $colleges[ $college->getId() ] );
+    }
+}
+
+foreach ( $awards as $award )
+{
+	if ( ! in_array( $award->getId(), $award_ids ) )
+	{
+		unset( $awards[ $award->getId() ] );
+	}
+}
+
+foreach ( $categories as $category )
+{
+	if ( ! in_array( $category->getId(), $category_ids ) )
+	{
+		unset( $categories[ $category->getId() ] );
+	}
+}
+
+$college_id = ( isset( $_GET['college_id'] ) && array_key_exists( $_GET['college_id'], $colleges ) ) ? $_GET['college_id'] : NULL;
+$program_id = ( isset( $_GET['program_id'] ) && array_key_exists( $_GET['program_id'], $colleges ) ) ? $_GET['program_id'] : NULL;
+if ( $program_id !== NULL )
+{
+    $college_id = $programs[ $program_id ]->getCollegeId();
 }
 
 ?>
@@ -52,6 +80,10 @@ foreach ( $programs as $program )
 		There are no recent graduate programs at this time.
 		Please check back later.
 	</div>
+
+<?php } elseif ( $college_id !== NULL ) { ?>
+
+
 
 <?php } else { ?>
 
@@ -86,10 +118,15 @@ foreach ( $programs as $program )
 	                        var lat_lng = new google.maps.LatLng( <?php echo $college->getLat() ?>, <?php echo $college->getLng(); ?> );
 
 		                    var coe_marker = new google.maps.Marker({
-		                        position: lat_lng
+		                        position: lat_lng,
+                                title: '<?php echo str_replace( "'", "\'", $college->getTitle() ); ?>'
 		                    });
 
 		                    coe_marker.setMap( coe_map );
+
+                            coe_marker.addListener('click', function() {
+                                window.location = '?college_id=<?php echo $college->getId(); ?>'
+                            });
 
 	                    <?php } ?>
 	                <?php } ?>

@@ -163,7 +163,8 @@ class Award {
 		$query = new \WP_Query( array(
 			'post_type' => self::POST_TYPE,
 			'post_status' => 'publish',
-			'posts_per_page' => -1
+			'posts_per_page' => -1,
+			'orderby' => 'title'
 		));
 
 
