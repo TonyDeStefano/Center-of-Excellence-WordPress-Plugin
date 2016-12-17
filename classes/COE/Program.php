@@ -526,4 +526,30 @@ class Program {
 
 		return $this;
 	}
+	/**
+	 * @return Program[]
+	 */
+	public static function getAllPublishedPrograms()
+	{
+		/** @var \WP_Post $post */
+		global $post;
+
+		$programs = array();
+
+		$query = new \WP_Query( array(
+			'post_type' => self::POST_TYPE,
+			'post_status' => 'publish'
+		));
+
+
+		while ( $query->have_posts() )
+		{
+			$query->the_post();
+			$program = new Program();
+			$program->loadFromPost( $post );
+			$programs[ $program->getId() ] = $program;
+		}
+
+		return $programs;
+	}
 }

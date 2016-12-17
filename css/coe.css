@@ -1,0 +1,13 @@
+.panel-coe {
+    border: none !important;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.8) !important;
+}
+
+.panel-coe > .panel-heading {
+    color: #FFF;
+    background: #00aeff;
+    text-transform: uppercase;
+    font-size: 16px;
+    font-family: 'Open Sans', sans-serif;
+    letter-spacing: 1.2px;
+}
