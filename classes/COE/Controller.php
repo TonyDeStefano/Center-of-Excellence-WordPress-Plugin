@@ -10,6 +10,7 @@ class Controller {
 	const OPTION_VERSION = 'coe_version';
 
 	const SETTING_GOOGLE_MAP_API_KEY = 'coe_google_maps_api_key';
+	const SETTING_RECENT_GRADS_VISIBLE = 'coe_recent_grads_visible';
 
 	public $attributes;
 
@@ -141,6 +142,7 @@ class Controller {
 	public function register_settings()
 	{
 		register_setting( 'coe_settings', self::SETTING_GOOGLE_MAP_API_KEY );
+		register_setting( 'coe_settings', self::SETTING_RECENT_GRADS_VISIBLE );
 	}
 
 	/**
@@ -149,6 +151,14 @@ class Controller {
 	public function getGoogleMapsApiKey()
 	{
 		return get_option( self::SETTING_GOOGLE_MAP_API_KEY, '' );
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isRecentGradsVisible()
+	{
+		return ( get_option( self::SETTING_RECENT_GRADS_VISIBLE, '1' ) == 1 );
 	}
 
 	/**
