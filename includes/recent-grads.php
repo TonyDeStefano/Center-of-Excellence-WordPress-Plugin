@@ -104,16 +104,14 @@ foreach ( $programs as $program )
 			<div class="panel panel-coe">
 				<div class="panel-heading">
 					Categories
+                    <span class="pull-right">
+                        <i class="fa fa-chevron-down coe-filter-arrow" data-menu="a" data-display="none"></i>
+                    </span>
 				</div>
-				<div class="panel-body">
+				<div class="panel-body panel-body-a" style="display:none;">
 					<?php foreach ( $categories as $category ) { ?>
-						<div class="row">
-							<div class="col-xs-2">
-								<input type="checkbox">
-							</div>
-							<div class="col-xs-10">
-								<?php echo $category->getTitle(); ?>
-							</div>
+						<div class="coe-cb coe-cb-category" data-id="<?php echo $category->getId(); ?>">
+                            <?php echo $category->getTitle(); ?>
 						</div>
 					<?php } ?>
 				</div>
@@ -122,16 +120,14 @@ foreach ( $programs as $program )
 			<div class="panel panel-coe">
 				<div class="panel-heading">
 					Cities
+                    <span class="pull-right">
+                        <i class="fa fa-chevron-down coe-filter-arrow" data-menu="b" data-display="none"></i>
+                    </span>
 				</div>
-				<div class="panel-body">
+				<div class="panel-body panel-body-b" style="display:none;">
 					<?php foreach ( $cities as $index => $city ) { ?>
-						<div class="row">
-							<div class="col-xs-2">
-								<input type="checkbox">
-							</div>
-							<div class="col-xs-10">
-								<?php echo $city; ?>
-							</div>
+                        <div class="coe-cb coe-cb-city" data-id="<?php echo $index; ?>">
+                            <?php echo $city; ?>
 						</div>
 					<?php } ?>
 				</div>
@@ -140,17 +136,15 @@ foreach ( $programs as $program )
 			<div class="panel panel-coe">
 				<div class="panel-heading">
 					Colleges
+                    <span class="pull-right">
+                        <i class="fa fa-chevron-down coe-filter-arrow" data-menu="c" data-display="none"></i>
+                    </span>
 				</div>
-				<div class="panel-body">
+				<div class="panel-body panel-body-c" style="display:none;">
 					<?php foreach ( $colleges as $college ) { ?>
-						<div class="row">
-							<div class="col-xs-2">
-								<input type="checkbox">
-							</div>
-							<div class="col-xs-10">
-								<?php echo $college->getTitle(); ?><br>
-								<em><?php echo $college->getCityState(); ?></em>
-							</div>
+                        <div class="coe-cb coe-cb-college" data-id="<?php echo $college->getId(); ?>">
+                            <?php echo $college->getTitle(); ?><br>
+                            <em><?php echo $college->getCityState(); ?></em>
 						</div>
 					<?php } ?>
 				</div>

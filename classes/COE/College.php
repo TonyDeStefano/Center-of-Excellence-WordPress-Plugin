@@ -14,6 +14,7 @@ class College {
 	const META_ZIP = 'zip';
 	const META_LAT = 'lat';
 	const META_LNG = 'lng';
+	const META_LOGO = 'logo';
 
 	private $id;
 	private $title;
@@ -23,6 +24,7 @@ class College {
 	private $zip;
 	private $lat;
 	private $lng;
+	private $logo;
 
 	/**
 	 * College constructor.
@@ -71,7 +73,8 @@ class College {
 			->setState( isset( $meta[ self::META_STATE ][ 0 ] ) ? $meta[ self::META_STATE ][ 0 ] : NULL )
 			->setZip( isset( $meta[ self::META_ZIP ][ 0 ] ) ? $meta[ self::META_ZIP ][ 0 ] : NULL )
 			->setLat( isset( $meta[ self::META_LAT ][ 0 ] ) ? $meta[ self::META_LAT ][ 0 ] : NULL )
-			->setLng( isset( $meta[ self::META_LNG ][ 0 ] ) ? $meta[ self::META_LNG ][ 0 ] : NULL );
+			->setLng( isset( $meta[ self::META_LNG ][ 0 ] ) ? $meta[ self::META_LNG ][ 0 ] : NULL )
+			->setLogo( isset( $meta[ self::META_LOGO ][ 0 ] ) ? $meta[ self::META_LOGO ][ 0 ] : NULL );
 
 		return $this;
 	}
@@ -89,6 +92,7 @@ class College {
 			update_post_meta( $this->id, self::META_ZIP, $this->getZip() );
 			update_post_meta( $this->id, self::META_LAT, $this->getLat() );
 			update_post_meta( $this->id, self::META_LNG, $this->getLng() );
+			update_post_meta( $this->id, self::META_LOGO, $this->getLogo() );
 		}
 	}
 
@@ -256,6 +260,47 @@ class College {
 	public function setLng( $lng )
 	{
 		$this->lng = ( is_numeric( $lng ) ) ? $lng : NULL;
+
+		return $this;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getLogo()
+	{
+		return ( $this->logo === NULL ) ? '' : $this->logo;
+	}
+
+	/**
+	 * @param mixed $logo
+	 *
+	 * @return College
+	 */
+	public function setLogo( $logo )
+	{
+		if ( strlen( $logo ) > 0 )
+		{
+			$parts = explode( '/', $logo );
+			$new_parts = array();
+			$add = FALSE;
+			foreach ( $parts as $part )
+			{
+				if ( $part == 'wp-content' )
+				{
+					$add = TRUE;
+				}
+
+				if ( $add )
+				{
+					$new_parts[] = $part;
+				}
+			}
+
+			$logo = '/' . implode( '/', $new_parts );
+		}
+
+		$this->logo = $logo;
 
 		return $this;
 	}

@@ -12,7 +12,7 @@ $college = new \COE\College( $post->ID );
 				Address:
 			</label>
 		</th>
-		<td>
+		<td colspan="2">
 			<input name="address" class="form-control" id="coe-college-address" value="<?php echo esc_html( $college->getAddress() ); ?>">
 		</td>
 	</tr>
@@ -22,7 +22,7 @@ $college = new \COE\College( $post->ID );
 				City:
 			</label>
 		</th>
-		<td>
+		<td colspan="2">
 			<input name="city" class="form-control" id="coe-college-city" value="<?php echo esc_html( $college->getCity() ); ?>">
 		</td>
 	</tr>
@@ -32,7 +32,7 @@ $college = new \COE\College( $post->ID );
 				State:
 			</label>
 		</th>
-		<td>
+		<td colspan="2">
 			<input name="state" class="form-control" id="coe-college-state" value="<?php echo esc_html( $college->getState() ); ?>">
 		</td>
 	</tr>
@@ -42,10 +42,29 @@ $college = new \COE\College( $post->ID );
 				Zip:
 			</label>
 		</th>
-		<td>
+		<td colspan="2">
 			<input name="zip" class="form-control" id="coe-college-zip" value="<?php echo esc_html( $college->getZip() ); ?>">
 		</td>
 	</tr>
+    <tr>
+        <th>
+            <label for="coe-college-logo">
+                Logo:
+            </label>
+        </th>
+        <td nowrap="">
+            <input type="hidden" name="logo" id="coe-college-logo" value="<?php echo $college->getLogo(); ?>">
+            <input id="coe-college-upload-logo" class="button-primary" value="<?php _e( 'Add Logo', 'coe' ); ?>" type="button">
+            <input id="coe-college-remove-logo" class="button-secondary" value="<?php _e( 'Remove Logo', 'coe' ); ?>" type="button" <?php if ( strlen( $college->getLogo() ) == 0 ) { ?> style="display:none"<?php } ?>>
+        </td>
+        <td>
+            <div id="coe-college-logo-img">
+                <?php if ( strlen ( $college->getLogo() ) > 0 ) { ?>
+                    <img class="img-responsive" src="<?php echo $college->getLogo(); ?>">
+                <?php } ?>
+            </div>
+        </td>
+    </tr>
 </table>
 
 <?php if ( $college->hasLatLng() ) { ?>

@@ -2622,3 +2622,9 @@ input[type="button"].btn-block {
 .panel-danger > .panel-footer + .panel-collapse > .panel-body {
     border-bottom-color: #ebccd1;
 }
+
+.img-responsive {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}

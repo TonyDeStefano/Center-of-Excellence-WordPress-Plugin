@@ -295,6 +295,7 @@ class Controller {
 					->setCity( $_POST['city'] )
 					->setState( $_POST['state'] )
 					->setZip( $_POST['zip'] )
+					->setLogo( $_POST['logo'] )
 					->update();
 
 				if ( $college->hasAddress() )
@@ -386,7 +387,8 @@ class Controller {
 	{
 		$new = array(
 			'location' => 'Location',
-			'has_map' => 'On Map'
+			'has_map' => 'On Map',
+			'logo' => 'Logo'
 		);
 
 		$columns = array_slice( $columns, 0, 2, TRUE ) + $new + array_slice( $columns, 2, NULL, TRUE );
@@ -415,6 +417,10 @@ class Controller {
 
 				case 'has_map':
 					echo ( $college->hasLatLng() ) ? 'Yes (<a href="http://www.google.com/maps/place/' . urlencode( $college->getAddressString() ) . '/@' . $college->getLat() . ',' . $college->getLng() . '" target="_blank">preview</a>)' : 'No';
+					break;
+
+				case 'logo':
+					echo ( strlen( $college->getLogo() ) > 0 ) ? '<img src="' . $college->getLogo() . '" class="img-responsive">' : '';
 					break;
 			}
 		}
