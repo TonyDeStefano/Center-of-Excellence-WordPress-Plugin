@@ -34,6 +34,7 @@ class Controller {
 
 		wp_enqueue_style( 'coe-css', plugin_dir_url( dirname( __DIR__ ) ) . 'css/coe.css', array (), ( WP_DEBUG ) ? time() : self::VERSION_CSS );
 		wp_enqueue_style( 'coe-bootstrap-css', plugin_dir_url( dirname( __DIR__ ) ) . 'css/bootstrap.css', array (), ( WP_DEBUG ) ? time() : self::VERSION_CSS );
+		wp_enqueue_style( 'coe-font-awesome-css', 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', array(), ( WP_DEBUG ) ? time() : self::VERSION_CSS );
 	}
 
 	/**
