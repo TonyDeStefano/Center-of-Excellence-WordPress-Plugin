@@ -77,12 +77,6 @@ if ( $program_id !== NULL )
     $college_id = $programs[ $program_id ]->getCollegeId();
 }
 
-$college = NULL;
-if ( $college_id !== NULL )
-{
-    $college = $colleges[ $college_id ];
-}
-
 $json_colleges = array();
 foreach ( $colleges as $college )
 {
@@ -126,6 +120,12 @@ foreach ( $colleges as $college )
         'categories' => $cats,
         'programs' => $progs
     );
+}
+
+$college = NULL;
+if ( $college_id !== NULL )
+{
+	$college = $colleges[ $college_id ];
 }
 
 ?>
