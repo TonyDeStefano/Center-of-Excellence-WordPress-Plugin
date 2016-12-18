@@ -5,7 +5,7 @@
  * Plugin URI: http://www.coeaerospace.com/
  * Description: Custom Plugin for Center of Excellence
  * Author: Tony DeStefano
- * Author URI: https://www.facebook.com/TonyDeStefanoWebcom
+ * Author URI: https://www.facebook.com/TonyDeStefanoWeb
  * Version: 1.0.0
  * Text Domain: coe
  *
