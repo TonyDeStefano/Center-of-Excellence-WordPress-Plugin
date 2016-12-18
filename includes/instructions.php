@@ -16,19 +16,31 @@
 
     [coe display="recent_grads"]
 
+    <p>
+        <a href="?page=coe_instructions&coe_import=true" class="btn btn-default">
+            <i class="fa fa-download" aria-hidden="true"></i>
+            Import Programs
+        </a>
+    </p>
+
 </div>
 
 <?php
 
-if ( isset( $_GET['import'] ) )
+if ( isset( $_GET['coe_import'] ) )
 {
     $categories = \COE\ProgramCategory::getAllPublishedCategories();
     $colleges = \COE\College::getAllPublishedColleges();
     $awards = \COE\Award::getAllPublishedAwards();
-    $current_programs = \COE\Program::getAllPublishedPrograms();
+    $current_programs = \COE\Program::getAllPrograms();
 
     $json = file_get_contents( __DIR__ . '/import.json' );
     $programs = json_decode( $json, TRUE );
+
+    $colleges_imported = 0;
+    $awards_imported = 0;
+    $categories_imported = 0;
+    $programs_imported = 0;
 
     foreach ( $programs as $program )
     {
@@ -47,6 +59,8 @@ if ( isset( $_GET['import'] ) )
 
             if ( $award_id == '' )
             {
+                $awards_imported++;
+
                 $award_id = wp_insert_post( array(
                     'post_title' => $program['award']['title'],
                     'post_type' => \COE\Award::POST_TYPE,
@@ -77,6 +91,8 @@ if ( isset( $_GET['import'] ) )
 
 		    if ( $college_id == '' )
 		    {
+		        $colleges_imported++;
+
 			    $college_id = wp_insert_post( array(
 				    'post_title' => $program['college']['title'],
 				    'post_type' => \COE\College::POST_TYPE,
@@ -112,6 +128,8 @@ if ( isset( $_GET['import'] ) )
 
 		        if ( $category_id == '' )
 		        {
+		            $categories_imported++;
+
 			        $category_id = wp_insert_post( array (
 				        'post_title' => $cat,
 				        'post_type' => \COE\ProgramCategory::POST_TYPE,
@@ -140,6 +158,8 @@ if ( isset( $_GET['import'] ) )
 
         if ( $program_id == '' )
         {
+            $programs_imported++;
+
             $program_id = wp_insert_post( array (
 	            'post_title' => $program['title'],
                 'post_content' => $program['description'],
@@ -165,6 +185,14 @@ if ( isset( $_GET['import'] ) )
 	        $current_programs[ $prog->getId() ] = $prog;
         }
     }
+
+    echo '
+        <div class="alert alert-info">
+            <strong>Colleges Imported:</strong> ' . $colleges_imported . '<br>
+            <strong>Awards Imported:</strong> ' . $awards_imported . '<br>
+            <strong>Categories Imported:</strong> ' . $categories_imported . '<br>
+            <strong>Programs Imported:</strong> ' . $programs_imported . '<br>
+        </div>';
 }
 
 ?>

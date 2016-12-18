@@ -516,6 +516,7 @@ class Program {
 
 		return $this;
 	}
+
 	/**
 	 * @return Program[]
 	 */
@@ -529,6 +530,35 @@ class Program {
 		$query = new \WP_Query( array(
 			'post_type' => self::POST_TYPE,
 			'post_status' => 'publish',
+			'posts_per_page' => -1,
+			'orderby' => 'title',
+			'order' => 'ASC'
+		));
+
+
+		while ( $query->have_posts() )
+		{
+			$query->the_post();
+			$program = new Program();
+			$program->loadFromPost( $post );
+			$programs[ $program->getId() ] = $program;
+		}
+
+		return $programs;
+	}
+
+	/**
+	 * @return Program[]
+	 */
+	public static function getAllPrograms()
+	{
+		/** @var \WP_Post $post */
+		global $post;
+
+		$programs = array();
+
+		$query = new \WP_Query( array(
+			'post_type' => self::POST_TYPE,
 			'posts_per_page' => -1,
 			'orderby' => 'title',
 			'order' => 'ASC'
