@@ -94,16 +94,16 @@ if ( $college_id !== NULL )
 
 <?php } elseif ( $college_id !== NULL ) { ?>
 
+    <p>
+        <a href="?" class="btn btn-default">
+            <i class="fa fa-chevron-left"></i>
+            Back to List
+        </a>
+    </p>
+
     <div class="row">
 
         <div class="col-md-8">
-
-            <p>
-                <a href="?" class="btn btn-default">
-                    <i class="fa fa-chevron-left"></i>
-                    Back to List
-                </a>
-            </p>
 
             <?php for ( $loop = 1; $loop <= 2; $loop++ ) { ?>
 
