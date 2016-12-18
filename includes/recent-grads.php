@@ -83,7 +83,59 @@ if ( $college_id !== NULL )
     $college = $colleges[ $college_id ];
 }
 
+$json_colleges = array();
+foreach ( $colleges as $college )
+{
+    $city_id = 0;
+    foreach ( $cities as $index => $city )
+    {
+        if ( $college->getCityState() == $city )
+        {
+            $city_id = $index;
+            break;
+        }
+    }
+
+    $cats = array();
+    $progs = array();
+
+    foreach ( $college->getProgramIds() as $pid )
+    {
+        $pcats = array();
+
+        foreach ( $programs[ $pid ]->getProgramCategoryIds() as $cid )
+        {
+            $pcats[] = $cid;
+
+            if ( ! in_array( $cid, $cats ) )
+            {
+                $cats[] = $cid;
+            }
+        }
+
+	    $progs[] = array(
+		    'id' => $pid,
+		    'categories' => $pcats
+	    );
+    }
+
+    $json_colleges[] = array(
+        'id' => $college->getId(),
+        'map' => ( $college->hasLatLng() ) ? 1 : 0,
+        'city' => $city_id,
+        'categories' => $cats,
+        'programs' => $progs
+    );
+}
+
 ?>
+
+<script>
+
+    var coe_colleges = <?php echo json_encode( $json_colleges ); ?>;
+    var coe_map;
+
+</script>
 
 <?php if ( count( $programs ) == 0 ) { ?>
 
@@ -207,6 +259,36 @@ if ( $college_id !== NULL )
                                     </div>
 	                            <?php } ?>
 
+                                <?php if ( count( $program->getProgramCategoryIds() ) > 0 ) { ?>
+
+                                    <?php
+
+                                    $cats = array();
+                                    foreach ( $program->getProgramCategoryIds() as $cat_id )
+                                    {
+                                        if ( isset( $categories[ $cat_id ] ) )
+                                        {
+                                            $cats[] = $categories[ $cat_id ]->getTitle();
+                                        }
+                                    }
+
+                                    ?>
+
+                                    <?php if ( count( $cats ) > 0 ) { ?>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <strong>Categories</strong>
+                                            </div>
+                                            <div class="col-md-8">
+                                                <?php echo implode( '<br>', $cats ); ?>
+                                            </div>
+                                        </div>
+
+                                    <?php } ?>
+
+                                <?php } ?>
+
 	                            <?php if ( strlen( $program->getDescription() ) > 0 ) { ?>
                                     <div class="row">
                                         <div class="col-md-12">
@@ -284,7 +366,7 @@ if ( $college_id !== NULL )
                                     mapTypeId: google.maps.MapTypeId.ROADMAP
                                 };
 
-                                var coe_map = new google.maps.Map( document.getElementById( 'coe-map' ), options );
+                                coe_map = new google.maps.Map( document.getElementById( 'coe-map' ), options );
 
 			                    var coe_marker = new google.maps.Marker({
                                     position: lat_lng
@@ -338,23 +420,31 @@ if ( $college_id !== NULL )
                         mapTypeId: google.maps.MapTypeId.ROADMAP
                     };
 
-                    var coe_map = new google.maps.Map( document.getElementById( 'coe-map' ), options );
+                    coe_map = new google.maps.Map( document.getElementById( 'coe-map' ), options );
 
                     <?php foreach ( $colleges as $college ) { ?>
 	                    <?php if ( $college->hasLatLng() ) { ?>
 
 	                        var lat_lng = new google.maps.LatLng( <?php echo $college->getLat() ?>, <?php echo $college->getLng(); ?> );
 
-		                    var coe_marker = new google.maps.Marker({
+		                    var coe_marker_<?php echo $college->getId(); ?> = new google.maps.Marker({
 		                        position: lat_lng,
                                 title: '<?php echo str_replace( "'", "\'", $college->getTitle() ); ?>'
 		                    });
 
-		                    coe_marker.setMap( coe_map );
+		                    coe_marker_<?php echo $college->getId(); ?>.setMap( coe_map );
 
-                            coe_marker.addListener('click', function() {
+                            coe_marker_<?php echo $college->getId(); ?>.addListener('click', function() {
                                 window.location = '?college_id=<?php echo $college->getId(); ?>'
                             });
+
+                            for ( var c = 0; c < coe_colleges.length; c++ )
+                            {
+                                if ( coe_colleges[c].id == <?php echo $college->getId(); ?> )
+                                {
+                                    coe_colleges[c].marker = coe_marker_<?php echo $college->getId(); ?>;
+                                }
+                            }
 
 	                    <?php } ?>
 	                <?php } ?>
@@ -366,7 +456,7 @@ if ( $college_id !== NULL )
 
             <?php foreach ( $colleges as $college ) { ?>
 
-                <div class="panel panel-coe-orange">
+                <div class="panel panel-coe-orange panel-coe-college" id="coe-college-<?php echo $college->getId(); ?>">
                     <div class="panel-heading">
                         <?php echo $college->getTitle(); ?><br>
                         <small>
@@ -380,7 +470,15 @@ if ( $college_id !== NULL )
 
                         <?php foreach ( $college->getProgramIds() as $program_id ) { ?>
                             <p>
-                                <a href="?program_id=<?php echo $program_id; ?>"><?php echo $programs[ $program_id ]->getTitle(); ?></a>
+                                <a href="?program_id=<?php echo $program_id; ?>"><strong><?php echo $programs[ $program_id ]->getTitle(); ?></strong></a>
+                                <?php if ( count( $programs[ $program_id ]->getProgramCategoryIds() ) > 0 ) { ?>
+                                    <br>
+                                    <?php foreach ( $programs[ $program_id ]->getProgramCategoryIds() as $cat_id ) { ?>
+                                        <?php if ( isset( $categories[ $cat_id ] ) ) { ?>
+                                            <span class="label label-default"><?php echo $categories[ $cat_id ]->getTitle(); ?></span>
+                                        <?php } ?>
+                                    <?php } ?>
+                                <?php } ?>
                             </p>
                         <?php } ?>
 
@@ -403,6 +501,7 @@ if ( $college_id !== NULL )
 				<div class="panel-body panel-body-a" style="display:none;">
 					<?php foreach ( $categories as $category ) { ?>
 						<div class="coe-cb coe-cb-category" data-id="<?php echo $category->getId(); ?>">
+                            <i class="fa fa-fw fa-square-o" aria-hidden="true"></i>
                             <?php echo $category->getTitle(); ?>
 						</div>
 					<?php } ?>
@@ -419,6 +518,7 @@ if ( $college_id !== NULL )
 				<div class="panel-body panel-body-b" style="display:none;">
 					<?php foreach ( $cities as $index => $city ) { ?>
                         <div class="coe-cb coe-cb-city" data-id="<?php echo $index; ?>">
+                            <i class="fa fa-fw fa-square-o" aria-hidden="true"></i>
                             <?php echo $city; ?>
 						</div>
 					<?php } ?>
@@ -435,6 +535,7 @@ if ( $college_id !== NULL )
 				<div class="panel-body panel-body-c" style="display:none;">
 					<?php foreach ( $colleges as $college ) { ?>
                         <div class="coe-cb coe-cb-college" data-id="<?php echo $college->getId(); ?>">
+                            <i class="fa fa-fw fa-square-o" aria-hidden="true"></i>
                             <?php echo $college->getTitle(); ?><br>
                             <em><?php echo $college->getCityState(); ?></em>
 						</div>
