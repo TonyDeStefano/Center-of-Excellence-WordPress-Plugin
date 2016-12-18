@@ -71,10 +71,16 @@ foreach ( $programs as $program )
 }
 
 $college_id = ( isset( $_GET['college_id'] ) && array_key_exists( $_GET['college_id'], $colleges ) ) ? $_GET['college_id'] : NULL;
-$program_id = ( isset( $_GET['program_id'] ) && array_key_exists( $_GET['program_id'], $colleges ) ) ? $_GET['program_id'] : NULL;
+$program_id = ( isset( $_GET['program_id'] ) && array_key_exists( $_GET['program_id'], $programs ) ) ? $_GET['program_id'] : NULL;
 if ( $program_id !== NULL )
 {
     $college_id = $programs[ $program_id ]->getCollegeId();
+}
+
+$college = NULL;
+if ( $college_id !== NULL )
+{
+    $college = $colleges[ $college_id ];
 }
 
 ?>
@@ -88,7 +94,224 @@ if ( $program_id !== NULL )
 
 <?php } elseif ( $college_id !== NULL ) { ?>
 
+    <div class="row">
 
+        <div class="col-md-8">
+
+            <p>
+                <a href="?" class="btn btn-default">
+                    <i class="fa fa-chevron-left"></i>
+                    Back to List
+                </a>
+            </p>
+
+            <?php for ( $loop = 1; $loop <= 2; $loop++ ) { ?>
+
+                <?php if ( $loop == 1 && $program_id === NULL ) continue; ?>
+
+                <?php if ( $loop == 2 && $program_id !== NULL && count( $college->getProgramIds() ) > 1 ) { ?>
+
+                    <hr>
+
+                    <h3 align="center">
+                        More Programs at<br>
+                        <?php echo $college->getTitle(); ?>
+                    </h3>
+
+                <?php } ?>
+
+                <?php foreach ( $college->getProgramIds() as $pid ) { ?>
+
+                    <?php if ( ( $loop == 1 && $program_id == $pid ) || ( $loop == 2 && $program_id != $pid ) || ( $loop == 2 && $program_id === NULL ) ) { ?>
+
+                        <?php $program = $programs[ $pid ]; ?>
+
+                        <div class="panel panel-coe-orange">
+                            <div class="panel-heading">
+					            <?php echo $program->getTitle(); ?>
+                                <span class="pull-right">
+                                    <?php if ( $loop == 1 ) { ?>
+                                        <i class="fa fa-chevron-down coe-filter-arrow" data-menu="<?php echo $program->getId(); ?>" data-display="block"></i>
+                                    <?php } else { ?>
+                                        <i class="fa fa-chevron-up coe-filter-arrow" data-menu="<?php echo $program->getId(); ?>" data-display="none"></i>
+                                    <?php } ?>
+                                </span>
+                            </div>
+                            <div class="panel-body panel-body-<?php echo $program->getId(); ?>"<?php if ( $loop == 2 ) { ?> style="display:none;"<?php } ?>>
+
+                                <?php if ( array_key_exists( $program->getAwardId(), $awards ) ) { ?>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <strong>Award Type</strong>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <?php echo $awards[ $program->getAwardId() ]->getTitle(); ?>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <strong>Credits</strong>
+                                    </div>
+                                    <div class="col-md-8">
+			                            <?php echo $program->getCredits(); ?>
+                                    </div>
+                                </div>
+
+                                <?php if ( strlen( $program->getStartsAt() ) > 0 ) { ?>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <strong>Starts</strong>
+                                        </div>
+                                        <div class="col-md-8">
+			                                <?php echo $program->getStartsAt(); ?>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+
+	                            <?php if ( strlen( $program->getEndsAt() ) > 0 ) { ?>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <strong>Ends</strong>
+                                        </div>
+                                        <div class="col-md-8">
+				                            <?php echo $program->getEndsAt(); ?>
+                                        </div>
+                                    </div>
+	                            <?php } ?>
+
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <strong>Anticipated Graduates</strong>
+                                    </div>
+                                    <div class="col-md-8">
+			                            <?php echo $program->getAnticipatedGraduates(); ?>
+                                    </div>
+                                </div>
+
+	                            <?php if ( strlen( $program->getContactName() ) > 0 ) { ?>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <strong>Contact</strong>
+                                        </div>
+                                        <div class="col-md-8">
+				                            <?php echo $program->getContactName(); ?>
+                                            <?php if ( strlen( $program->getContactPhone() ) > 0 ) { ?>
+                                                <br><?php echo $program->getContactPhone(); ?>
+                                            <?php } ?>
+	                                        <?php if ( strlen( $program->getContactEmail() ) > 0 ) { ?>
+                                                <br><a href="mailto:<?php echo $program->getContactEmail(); ?>"><?php echo $program->getContactEmail(); ?></a>
+	                                        <?php } ?>
+                                        </div>
+                                    </div>
+	                            <?php } ?>
+
+	                            <?php if ( strlen( $program->getDescription() ) > 0 ) { ?>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <strong>Description</strong>
+                                        </div>
+                                        <div class="col-md-12">
+				                            <?php echo $program->getDescription(); ?>
+                                        </div>
+                                    </div>
+	                            <?php } ?>
+
+	                            <?php if ( strlen( $program->getSkillSets() ) > 0 ) { ?>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <strong>Skill Sets</strong>
+                                        </div>
+                                        <div class="col-md-12">
+				                            <?php echo $program->getSkillSets(); ?>
+                                        </div>
+                                    </div>
+	                            <?php } ?>
+
+                            </div>
+                        </div>
+
+                    <?php } ?>
+
+                <?php } ?>
+
+            <?php } ?>
+
+        </div>
+
+        <div class="col-md-4">
+
+            <div class="panel panel-coe">
+                <div class="panel-heading">
+	                <?php echo $college->getTitle(); ?>
+                </div>
+                <div class="panel-body">
+
+	                <?php if ( strlen( $college->getLogo() ) > 0 ) { ?>
+                        <p align="center">
+                            <img src="<?php echo $college->getLogo(); ?>" class="img-responsive">
+                        </p>
+                        <hr>
+	                <?php } ?>
+
+                    <p align="center">
+                        <strong><?php echo $college->getTitle(); ?></strong><br>
+		                <?php echo $college->getAddress(); ?><br>
+		                <?php echo $college->getCityStateZip(); ?>
+                    </p>
+
+                    <?php if ( $college->hasLatLng() ) { ?>
+
+                        <hr>
+
+                        <div id="coe-map" style="width:100%; height:200px;"></div>
+
+                        <script>
+
+                            jQuery(function(){
+
+                                coeMapInit();
+                            });
+
+                            function coeMapInit()
+                            {
+                                var lat_lng = new google.maps.LatLng( <?php echo $college->getLat(); ?>, <?php echo $college->getLng(); ?> );
+
+                                var options = {
+                                    zoom: 13,
+                                    center: lat_lng,
+                                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                                };
+
+                                var coe_map = new google.maps.Map( document.getElementById( 'coe-map' ), options );
+
+			                    var coe_marker = new google.maps.Marker({
+                                    position: lat_lng
+                                });
+
+			                    coe_marker.setMap( coe_map );
+                            }
+
+                        </script>
+
+                        <hr>
+
+                        <p align="center">
+                            <a target="_blank" class="btn btn-default" href="<?php echo 'http://www.google.com/maps/place/' . urlencode( $college->getAddressString() ) . '/@' . $college->getLat() . ',' . $college->getLng(); ?>">
+                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                Directions
+                            </a>
+                        </p>
+
+                    <?php } ?>
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
 
 <?php } else { ?>
 
@@ -150,8 +373,8 @@ if ( $program_id !== NULL )
                             <?php echo $college->getCityState(); ?>
                         </small>
                         <span class="pull-right">
-                        <i class="fa fa-chevron-up coe-filter-arrow" data-menu="<?php echo $college->getId(); ?>" data-display="none"></i>
-                    </span>
+                            <i class="fa fa-chevron-up coe-filter-arrow" data-menu="<?php echo $college->getId(); ?>" data-display="none"></i>
+                        </span>
                     </div>
                     <div class="panel-body panel-body-<?php echo $college->getId(); ?>" style="display:none;">
 
