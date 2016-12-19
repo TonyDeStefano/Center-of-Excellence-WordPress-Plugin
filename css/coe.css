@@ -52,3 +52,14 @@
     border-radius: 5px;
     box-shadow: 0 0 3px rgba(0, 0, 0, 0.8) !important;
 }
+
+p {
+    margin-bottom: 24px;
+}
+
+hr {
+    background-color: #ccc;
+    border: 0;
+    height: 1px;
+    margin: 24px;
+}
