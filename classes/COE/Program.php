@@ -33,7 +33,16 @@ class Program {
 	private $skill_sets;
 	private $college_id;
 	private $award_id;
-	private $program_category_ids = [];
+	private $program_category_ids = array();
+
+	/** @var College $college */
+	private $college;
+
+	/** @var Award $award */
+	private $award;
+
+	/** @var ProgramCategory[] $program_categories */
+	private $program_categories = array();
 
 	/**
 	 * College constructor.
@@ -121,15 +130,6 @@ class Program {
 	{
 		$this->update();
 	}
-
-	/** @var College $college */
-	private $college;
-
-	/** @var Award $award */
-	private $award;
-
-	/** @var ProgramCategory[] $program_categories */
-	private $program_categories = [];
 
 	/**
 	 * @return mixed
