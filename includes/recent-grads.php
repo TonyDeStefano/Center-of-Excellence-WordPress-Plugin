@@ -543,6 +543,12 @@ if ( $college_id !== NULL )
 				</div>
 			</div>
 
+			<?php if ( strlen( $coe_controller->getRightColumn() ) > 0 ) { ?>
+
+				<?php echo $coe_controller->getRightColumn(); ?>
+
+			<?php } ?>
+
 		</div>
 
 	</div>

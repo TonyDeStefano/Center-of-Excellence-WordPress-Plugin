@@ -11,6 +11,7 @@ class Controller {
 
 	const SETTING_GOOGLE_MAP_API_KEY = 'coe_google_maps_api_key';
 	const SETTING_RECENT_GRADS_VISIBLE = 'coe_recent_grads_visible';
+	const SETTING_RIGHT_COLUMN = 'coe_right_column';
 
 	public $attributes;
 
@@ -144,6 +145,7 @@ class Controller {
 	{
 		register_setting( 'coe_settings', self::SETTING_GOOGLE_MAP_API_KEY );
 		register_setting( 'coe_settings', self::SETTING_RECENT_GRADS_VISIBLE );
+		register_setting( 'coe_settings', self::SETTING_RIGHT_COLUMN );
 	}
 
 	/**
@@ -160,6 +162,14 @@ class Controller {
 	public function isRecentGradsVisible()
 	{
 		return ( get_option( self::SETTING_RECENT_GRADS_VISIBLE, '1' ) == 1 );
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getRightColumn()
+	{
+		return trim( get_option( self::SETTING_RIGHT_COLUMN, '' ) );
 	}
 
 	/**

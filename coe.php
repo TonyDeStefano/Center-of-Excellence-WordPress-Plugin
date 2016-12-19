@@ -26,6 +26,11 @@
  *
  */
 
+if ( ! defined( 'WPINC' ) )
+{
+	die;
+}
+
 require_once ( 'classes/COE/Controller.php' );
 require_once ( 'classes/COE/College.php' );
 require_once ( 'classes/COE/Program.php' );

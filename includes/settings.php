@@ -56,6 +56,25 @@
                     </select>
                 </td>
             </tr>
+            <tr valign="top">
+                <th scope="row">
+                    <label>
+						<?php _e( 'Right Column', 'coe' ); ?>
+                    </label>
+                </th>
+                <td style="vertical-align:top; width:40%;">
+                    <?php echo $this->getRightColumn(); ?>
+                </td>
+                <td style="vertical-align:top; width:40%;">
+
+	                <?php
+
+	                $settings = array( 'media_buttons' => FALSE );
+	                wp_editor( $this->getRightColumn(), \COE\Controller::SETTING_RIGHT_COLUMN, $settings );
+
+	                ?>
+
+                </td>
 		</table>
 
 		<?php submit_button(); ?>
