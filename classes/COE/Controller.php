@@ -218,6 +218,10 @@ class Controller {
 			{
 				$supports[] = 'editor';
 			}
+			if ( $post_type[ 2 ] == College::POST_TYPE )
+			{
+				$supports[] = 'thumbnail';
+			}
 
 			$args = array (
 				'labels' => $labels,

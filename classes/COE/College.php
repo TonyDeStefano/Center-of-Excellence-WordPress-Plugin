@@ -14,7 +14,6 @@ class College {
 	const META_ZIP = 'zip';
 	const META_LAT = 'lat';
 	const META_LNG = 'lng';
-	const META_LOGO = 'logo';
 
 	private $id;
 	private $title;
@@ -75,7 +74,7 @@ class College {
 			->setZip( isset( $meta[ self::META_ZIP ][ 0 ] ) ? $meta[ self::META_ZIP ][ 0 ] : NULL )
 			->setLat( isset( $meta[ self::META_LAT ][ 0 ] ) ? $meta[ self::META_LAT ][ 0 ] : NULL )
 			->setLng( isset( $meta[ self::META_LNG ][ 0 ] ) ? $meta[ self::META_LNG ][ 0 ] : NULL )
-			->setLogo( isset( $meta[ self::META_LOGO ][ 0 ] ) ? $meta[ self::META_LOGO ][ 0 ] : NULL );
+			->setLogo( get_the_post_thumbnail_url( $post ) );
 
 		return $this;
 	}
@@ -93,7 +92,6 @@ class College {
 			update_post_meta( $this->id, self::META_ZIP, $this->getZip() );
 			update_post_meta( $this->id, self::META_LAT, $this->getLat() );
 			update_post_meta( $this->id, self::META_LNG, $this->getLng() );
-			update_post_meta( $this->id, self::META_LOGO, $this->getLogo() );
 		}
 	}
 
