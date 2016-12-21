@@ -133,7 +133,6 @@ class Controller {
 	 */
 	public function admin_scripts()
 	{
-		wp_enqueue_media();
 		wp_enqueue_script( 'coe-admin-js', plugin_dir_url( dirname( __DIR__ ) ) . 'js/coe-admin.js', array ( 'jquery' ), ( WP_DEBUG ) ? time() : self::VERSION_JS, TRUE );
 		wp_enqueue_style( 'coe-admin-css', plugin_dir_url( dirname( __DIR__ ) ) . 'css/coe-admin.css', array (), ( WP_DEBUG ) ? time() : self::VERSION_CSS );
 	}
