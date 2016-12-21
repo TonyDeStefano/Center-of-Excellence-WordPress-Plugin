@@ -309,7 +309,6 @@ class Controller {
 					->setCity( $_POST['city'] )
 					->setState( $_POST['state'] )
 					->setZip( $_POST['zip'] )
-					->setLogo( $_POST['logo'] )
 					->update();
 
 				if ( $college->hasAddress() )
