@@ -278,27 +278,6 @@ class College {
 	 */
 	public function setLogo( $logo )
 	{
-		if ( strlen( $logo ) > 0 )
-		{
-			$parts = explode( '/', $logo );
-			$new_parts = array();
-			$add = FALSE;
-			foreach ( $parts as $part )
-			{
-				if ( $part == 'wp-content' )
-				{
-					$add = TRUE;
-				}
-
-				if ( $add )
-				{
-					$new_parts[] = $part;
-				}
-			}
-
-			$logo = '/' . implode( '/', $new_parts );
-		}
-
 		$this->logo = $logo;
 
 		return $this;
