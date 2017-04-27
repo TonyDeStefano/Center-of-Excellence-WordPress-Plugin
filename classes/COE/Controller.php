@@ -538,13 +538,7 @@ class Controller {
 		/** @var \WP_Post $post */
 		global $post;
 
-		if ( ! isset( $GLOBALS['coe_this_post'] ) )
-		{
-			$GLOBALS['coe_this_post'] = $post;
-		}
-
-		$program = new Program;
-		$program->loadFromPost( $GLOBALS['coe_this_post'] );
+		$program = new Program( $post->ID );
 
 		if ( $program->getId() !== NULL )
 		{
