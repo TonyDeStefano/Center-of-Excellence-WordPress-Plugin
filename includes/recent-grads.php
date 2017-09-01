@@ -238,7 +238,11 @@ if ( $college_id !== NULL )
                                         <strong>Anticipated Graduates</strong>
                                     </div>
                                     <div class="col-md-8">
-			                            <?php echo $program->getAnticipatedGraduates(); ?>
+                                        <?php if ( $program->getAnticipatedGraduates() == 0 ) { ?>
+                                            Please Call
+                                        <?php } else { ?>
+			                                <?php echo $program->getAnticipatedGraduates(); ?>
+                                        <?php } ?>
                                     </div>
                                 </div>
 
