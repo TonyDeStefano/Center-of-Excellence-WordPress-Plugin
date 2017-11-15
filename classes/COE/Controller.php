@@ -4,7 +4,7 @@ namespace COE;
 
 class Controller {
 
-	const VERSION = '1.0.0';
+	const VERSION = '1.0.2';
 	const VERSION_CSS = '1.0.2';
 	const VERSION_JS = '1.0.0';
 	const OPTION_VERSION = 'coe_version';
@@ -128,6 +128,109 @@ class Controller {
 		include( dirname( dirname( __DIR__ ) ) . '/includes/settings.php' );
 	}
 
+    /**
+     *
+     */
+    public function print_exports_page()
+    {
+        include( dirname( dirname( __DIR__ ) ) . '/includes/exports.php' );
+    }
+
+    public function process_exports()
+    {
+        if ( isset( $_GET['coe_export'] ) )
+        {
+            header( 'Content-type: text/csv' );
+            header( 'Pragma: no-cache' );
+            header( 'Expires: 0' );
+
+            switch ( $_GET['coe_export'] )
+            {
+                case 'colleges':
+
+                    header( 'Content-Disposition: attachment; filename=colleges.csv' );
+                    echo 'Title,Address,City,State,Zip' . "\r\n";
+
+                    $colleges = College::getAllPublishedColleges();
+
+                    foreach ( $colleges as $college )
+                    {
+                        echo '"' . str_replace( '"', '""', $college->getTitle() ) . '",';
+                        echo '"' . str_replace( '"', '""', $college->getAddress() ) . '",';
+                        echo '"' . str_replace( '"', '""', $college->getCity() ) . '",';
+                        echo '"' . str_replace( '"', '""', $college->getState() ) . '",';
+                        echo '"' . str_replace( '"', '""', $college->getZip() ) . '"';
+                        echo "\r\n";
+                    }
+
+                    break;
+
+                case 'programs':
+
+                    header( 'Content-Disposition: attachment; filename=programs.csv' );
+                    echo 'Title,Description,College,Award,Categories,Contact Name,Contact Email,Contact Phone,Credits,Start Date,End Date,Anticipated Graduates,Skill Sets,' . "\r\n";
+
+                    $programs = Program::getAllPrograms();
+
+                    foreach ( $programs as $program )
+                    {
+                        echo '"' . str_replace( '"', '""', $program->getTitle() ) . '",';
+                        echo '"' . str_replace( '"', '""', $program->getDescription() ) . '",';
+                        echo '"' . str_replace( '"', '""', $program->getCollege()->getTitle() ) . '",';
+                        echo '"' . str_replace( '"', '""', $program->getAward()->getTitle() ) . '",';
+                        echo '"' . str_replace( '"', '""', implode( ',', $program->getProgramCategories() ) ) . '",';
+                        echo '"' . str_replace( '"', '""', $program->getContactName() ) . '",';
+                        echo '"' . str_replace( '"', '""', $program->getContactEmail() ) . '",';
+                        echo '"' . str_replace( '"', '""', $program->getContactPhone() ) . '",';
+                        echo '"' . str_replace( '"', '""', $program->getCredits() ) . '",';
+                        echo '"' . str_replace( '"', '""', $program->getStartsAt() ) . '",';
+                        echo '"' . str_replace( '"', '""', $program->getEndsAt() ) . '",';
+                        echo '"' . str_replace( '"', '""', $program->getAnticipatedGraduates() ) . '",';
+                        echo '"' . str_replace( '"', '""', $program->getSkillSets() ) . '",';
+                        echo "\r\n";
+                    }
+
+                    break;
+
+                case 'categories':
+
+                    header( 'Content-Disposition: attachment; filename=categories.csv' );
+                    echo 'Title' . "\r\n";
+
+                    $categories = ProgramCategory::getAllPublishedCategories();
+
+                    foreach ( $categories as $category )
+                    {
+                        echo '"' . str_replace( '"', '""', $category->getTitle() ) . '",';
+                        echo "\r\n";
+                    }
+
+                    break;
+
+                case 'awards':
+
+                    header( 'Content-Disposition: attachment; filename=awards.csv' );
+                    echo 'Title' . "\r\n";
+
+                    $awards = Award::getAllPublishedAwards();
+
+                    foreach ( $awards as $award )
+                    {
+                        echo '"' . str_replace( '"', '""', $award->getTitle() ) . '",';
+                        echo "\r\n";
+                    }
+
+                    break;
+
+                default:
+
+                    header( 'Content-Disposition: attachment; filename=file.csv' );
+            }
+
+            die;
+        }
+    }
+
 	/**
 	 *
 	 */
@@ -249,6 +352,7 @@ class Controller {
 		add_menu_page( 'COE', 'COE', 'manage_options', 'coe', array ( $this, 'print_settings_page' ), 'dashicons-welcome-learn-more' );
 		add_submenu_page( 'coe', __( 'Settings', 'coe' ), __( 'Settings', 'coe' ), 'manage_options', 'coe' );
 		add_submenu_page( 'coe', __( 'Instructions', 'coe' ), __( 'Instructions', 'coe' ), 'manage_options', 'coe_instructions', array( $this, 'print_instructions_page' ) );
+        add_submenu_page( 'coe', __( 'Exports', 'coe' ), __( 'Exports', 'coe' ), 'manage_options', 'coe_exports', array( $this, 'print_exports_page' ) );
 	}
 
 	/**

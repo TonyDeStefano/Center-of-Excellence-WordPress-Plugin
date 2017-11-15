@@ -97,4 +97,7 @@ if ( is_admin() )
 	add_action( 'admin_init', array( $coe_controller, 'program_meta' ) );
 	add_filter( 'manage_' . \COE\Program::POST_TYPE . '_posts_columns', array( $coe_controller, 'add_new_program_columns' ) );
 	add_action( 'manage_' . \COE\Program::POST_TYPE . '_posts_custom_column' , array( $coe_controller, 'custom_program_columns' ) );
+	
+	/* exports */
+    add_action( 'init', array( $coe_controller, 'process_exports' ) );
 }

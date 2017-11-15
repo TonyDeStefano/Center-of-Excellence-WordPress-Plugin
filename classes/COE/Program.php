@@ -449,6 +449,11 @@ class Program {
 	 */
 	public function getCollege()
 	{
+	    if ( $this->college === NULL )
+        {
+            $this->college = new College( $this->getCollegeId() );
+        }
+
 		return $this->college;
 	}
 
@@ -469,6 +474,11 @@ class Program {
 	 */
 	public function getAward()
 	{
+	    if ( $this->award === NULL )
+        {
+            $this->award = new Award( $this->award_id );
+        }
+
 		return $this->award;
 	}
 
